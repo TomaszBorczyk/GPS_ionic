@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar hideBackButton="true">
     <ion-title>Login</ion-title>
   </ion-navbar>
 
@@ -21,6 +21,7 @@
             <div class="error active" *ngIf="loginFailed">
                 Invalid user name or password
             </div>
+            <ion-label class="login-error" *ngIf="loginFailed">Login failed</ion-label>
             <button ion-button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary">Login</button>
         </form>
       </div>
