@@ -1,26 +1,33 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { AuthService } from '../services/auth.service';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
+
+import { AuthService } from '../services/auth.service';
+import { SocketService } from '../services/socket.service';
+
+import * as io from 'socket.io-client';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = LoginPage;
-  pages: Array<{title: string, component: any}>;
+  private socket;
+  public rootPage: any = LoginPage;
+  public pages: Array<{title: string, component: any}>;
+
 
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private my_authService: AuthService) {
+    private my_authService: AuthService,
+    private my_socketService: SocketService) {
     this.checkIfLoggedIn();
     this.initializeApp();
 
@@ -34,6 +41,7 @@ export class MyApp {
 
   public logout() {
     this.my_authService.logout();
+    this.my_socketService.disconnect();
     this.nav.push(LoginPage);
   }
 
@@ -59,6 +67,8 @@ export class MyApp {
       this.rootPage = LoginPage;
     } else {
       this.rootPage = HomePage;
+      this.my_socketService.initSocket();
+      this.my_socketService.emitUserId();
     }
   }
 

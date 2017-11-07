@@ -12,6 +12,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AuthService } from '../services/auth.service';
+import { SocketService } from '../services/socket.service';
+import { UserService } from '../services/user.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { AuthService } from '../services/auth.service';
   ],
   providers: [
     AuthService,
+    SocketService,
+    UserService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

@@ -80,7 +80,6 @@ export class LoginPage {
       this.my_AuthService
           .login(username, password)
           .then( () => {
-            console.log('hey');
             this.navCtrl.setRoot(HomePage);
             this.navCtrl.push(HomePage);
           })

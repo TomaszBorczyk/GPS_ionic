@@ -12,8 +12,7 @@ export class AuthService {
   constructor(
     private http: Http,
   ) {
-    // this.apiServer = environment.apiUrl;
-    this.apiServer = 'https://gps-tracker.herokuapp.com/api/v1';
+    this.apiServer = 'http://127.0.0.1:4567/api/v1';
   }
 
 
