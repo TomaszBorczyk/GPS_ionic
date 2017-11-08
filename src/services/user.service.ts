@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { Device } from '../models/device.model';
 import { User } from '../models/user.model';
 
 
@@ -18,6 +19,11 @@ export class UserService {
   public getUser(): User {
       const user: User =  JSON.parse(localStorage.getItem('user'));
       return user;
+  }
+
+  public getDevices(): Array<Device> {
+      const devices: Array<Device> = (JSON.parse(localStorage.getItem('user')) as User).devices;
+      return devices;
   }
 
 }

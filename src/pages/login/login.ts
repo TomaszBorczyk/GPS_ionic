@@ -7,7 +7,6 @@ import { MenuController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

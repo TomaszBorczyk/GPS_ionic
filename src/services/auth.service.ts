@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-// import { environment } from '../../environments/environment';
+
 import { User } from '../models/user.model';
+import { SocketService } from './socket.service';
+
 
 @Injectable()
 export class AuthService {
@@ -11,8 +13,10 @@ export class AuthService {
 
   constructor(
     private http: Http,
+    private my_socketService: SocketService,
   ) {
-    this.apiServer = 'http://127.0.0.1:4567/api/v1';
+    // this.apiServer = 'http://127.0.0.1:4567/api/v1';
+    this.apiServer = 'https://gps-tracker.herokuapp.com/api/v1';
   }
 
 
@@ -38,6 +42,8 @@ export class AuthService {
       .then( (res: Response) => {
         const resUser: User = res.json().user;
         localStorage.setItem('user', JSON.stringify(resUser));
+        this.my_socketService.initSocket();
+        this.my_socketService.emitUserId();
       });
     }
 

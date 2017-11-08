@@ -1,7 +1,7 @@
-import { Component, ViewChild, OnDestroy } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Nav, Platform } from 'ionic-angular';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -60,9 +60,8 @@ export class MyApp {
     });
   }
 
-
-
   private checkIfLoggedIn(): void {
+    console.log('main');
     if (localStorage.getItem('user') == null) {
       this.rootPage = LoginPage;
     } else {
@@ -71,5 +70,7 @@ export class MyApp {
       this.my_socketService.emitUserId();
     }
   }
+
+
 
 }

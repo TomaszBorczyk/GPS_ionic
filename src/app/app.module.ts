@@ -1,17 +1,22 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { Geolocation } from '@ionic-native/geolocation';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
-import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
+import { MyApp } from './app.component';
 
-import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
 
+import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
+import { GPSService } from '../services/gps.service';
+import { NotificationService } from '../services/notification.service';
 import { SocketService } from '../services/socket.service';
 import { UserService } from '../services/user.service';
 
@@ -35,11 +40,16 @@ import { UserService } from '../services/user.service';
     LoginPage
   ],
   providers: [
+    AlertService,
     AuthService,
+    LocalNotifications,
+    Geolocation,
+    GPSService,
+    NotificationService,
     SocketService,
-    UserService,
-    StatusBar,
     SplashScreen,
+    StatusBar,
+    UserService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

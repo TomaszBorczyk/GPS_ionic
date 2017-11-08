@@ -4,6 +4,8 @@ import 'rxjs/add/operator/toPromise';
 import * as io from 'socket.io-client';
 
 import { User } from '../models/user.model';
+import { AlertService } from './alert.service';
+import { NotificationService } from './notification.service';
 import { UserService } from './user.service';
 
 
@@ -13,19 +15,19 @@ export class SocketService {
   private socket;
 
   constructor(
-      private my_userService: UserService
+      private my_userService: UserService,
+      private my_alertService: AlertService,
+      private my_notificationService: NotificationService,
   ) {
-    this.socketUrl = 'http://127.0.0.1:4567';
+    // this.socketUrl = 'http://127.0.0.1:4567';
+    this.socketUrl = 'https://gps-tracker.herokuapp.com';
 
   }
 
   private setSocketListen() {
-    this.socket.on('bob', message => {
-        console.log('wooo, hello');
-    });
-
     this.socket.on('alert', message => {
-        console.log(message);
+        this.my_alertService.presentAlert(message.device);
+        this.my_notificationService.alertUnwantedMovement(message);
     });
   }
 
@@ -42,6 +44,8 @@ export class SocketService {
   public disconnect() {
       this.socket.disconnect();
   }
+
+
 
 
 

@@ -2,5 +2,7 @@
   "name": "GPS_ionic",
   "app_id": "a579bfe9",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }
