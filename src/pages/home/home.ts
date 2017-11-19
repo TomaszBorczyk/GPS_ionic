@@ -72,7 +72,7 @@ export class HomePage {
       this.my_gpsService.watchPosition()
       .subscribe(data => {
         this.data = JSON.stringify(data);
-        if (Object.keys(data).length === 0) {
+        if (data == null) {
           return;
         }
         this.phoneLocation = {
@@ -80,6 +80,7 @@ export class HomePage {
           lon: data.coords.longitude,
           date: new Date()
         };
+        this.setDistanceData();
       },
       err => {
         this.error = JSON.stringify(err);
