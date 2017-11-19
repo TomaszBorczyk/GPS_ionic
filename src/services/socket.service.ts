@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { Subject } from 'rxjs/Subject';
 import * as io from 'socket.io-client';
 
 import { User } from '../models/user.model';
@@ -13,6 +14,7 @@ import { UserService } from './user.service';
 export class SocketService {
   private socketUrl: string;
   private socket;
+  public message = new Subject<any>();
 
   constructor(
       private my_userService: UserService,
@@ -26,7 +28,8 @@ export class SocketService {
 
   private setSocketListen() {
     this.socket.on('alert', message => {
-        this.my_alertService.presentAlert(message.device);
+        // this.message.next(message);
+        this.my_alertService.presentAlert(message.name);
         this.my_notificationService.alertUnwantedMovement(message);
     });
   }

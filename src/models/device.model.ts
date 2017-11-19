@@ -1,8 +1,8 @@
-import { GPS } from './gps.model';
+import { GPSActivity } from './gps.model';
 
 export interface Device {
-    device_id: string;
+    deviceId: string;
     name: string;
-    gpsData: Array<GPS>;
+    gpsData: Array<GPSActivity>;
     date: Date;
 }

@@ -1,3 +1,68 @@
 page-home {
 
 }
+
+
+ion-select {
+    margin: auto;
+    color: #fff;
+    background-color: lighten(color($colors, main-dark), 10%);
+    width: 70%;
+    max-width: 70%;
+}
+
+//to disable select's bug (global touch reaction)
+.item-cover {
+    width: 0;
+    height: 0;
+}
+
+.circle {
+    margin: auto;
+    margin-top: 20%;
+    width: 300px;
+    height: 300px;
+    background-color: color($colors, main-dark);
+    border-radius: 100%;
+    position: relative;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    
+    &:before{
+        border-radius: 50%;
+        width: 100%;
+        height:100%;
+        content: '';
+        background-image: linear-gradient(to bottom, #3acfd5 0%, #3a4ed5 100%);
+        padding: 10px;
+        top: -10px;
+        left: -10px;
+        position:absolute;
+        z-index:-1;
+    }
+
+    div {
+        margin-top: 30%;
+        color: white;
+        font-size: 100px;
+    }
+
+    span {
+        margin-top: 30%;
+        color: white;
+        font-size: 35px;
+    }
+}
+
+.circle-cut {
+        position: absolute;
+        width: 150px;
+        height: 50px;
+        background-color: color($colors, main-dark);
+        z-index: -1;
+        top: -30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+}
+

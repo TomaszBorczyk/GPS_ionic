@@ -7,13 +7,32 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Dashboard</h3>
-  <h4>{{user.email}}</h4>
-  Location: {{location.lat}}, {{location.lon}}
+<ion-content class="home" padding>
+  <!-- <h3>Dashboard</h3>
+  <h4>{{user.email}}</h4> -->
+
+  <ion-select [(ngModel)]="selectedDevice" (ionChange)="afterDeviceSelect()">
+    <ion-option *ngFor="let device of user.devices" [value]="device">{{device.name}}</ion-option>
+  </ion-select>
+  <!-- <div>
+    device selected: {{selectedDevice.name}}
+  </div> -->
+  <!-- <div *ngIf="lastLocation != null">
+    last seen: {{lastLocation.lon}}, {{lastLocation.lat}}
+  </div> -->
+  <div class="circle">
+    <div class="circle-cut"></div>
+    <div>
+      {{distanceDisplay}}
+    </div>
+    <span>
+      {{unit}}
+    </span>
+  </div>
+  <!-- Location: {{location.lat}}, {{location.lon}}
   code: {{error.code}}
-  message: {{error.message}}
+  message: {{error.message}} -->
   <!-- Location: {{location.message}} -->
   
-  <button ion-button secondary (click)='createNotification()'>Create notification</button>
+  <!-- <button ion-button secondary (click)='createNotification()'>Create notification</button> -->
 </ion-content>

@@ -13,7 +13,7 @@ export class UserService {
 
   public getUserId(): string {
       const user: User =  JSON.parse(localStorage.getItem('user'));
-      return user.id;
+      return user._id;
   }
 
   public getUser(): User {
