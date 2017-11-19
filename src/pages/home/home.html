@@ -17,4 +17,7 @@
     <div [ngClass]="{'distanceAvailable': lastLocation != null, 'noDistance': lastLocation == null}"> {{distanceDisplay}} </div>
     <span> {{unit}} </span>
   </div>
+  <!-- <div *ngIf="phoneLocation == null">Waiting for phone GPS...</div> -->
+  <div style="color: white"> phonegps: {{data}}, error: {{error}}</div>
+  <div style="color: white"> gps: {{phoneLocation.lat}}, {{phoneLocation.lon}}</div>
 </ion-content>

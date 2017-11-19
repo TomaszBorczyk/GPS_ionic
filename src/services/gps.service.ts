@@ -12,8 +12,7 @@ export class GPSService {
 
   constructor(
       private geolocation: Geolocation
-  ) {
-  }
+  ) { }
 
   public setCurrentLocaiton(location: GPSActivity): void {
     this.curretLoc = location;

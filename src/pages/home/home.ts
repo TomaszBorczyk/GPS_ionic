@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Vibration } from '@ionic-native/vibration';
 import { NavController } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
 
@@ -9,6 +10,9 @@ import { GPSActivity } from '../../models/gps.model';
 import { User } from '../../models/user.model';
 
 import { GPSService } from '../../services/gps.service';
+import { SocketService } from '../../services/socket.service';
+import { UserService } from '../../services/user.service';
+
 import { LoginPage } from '../login/login';
 
 const MAX_DISTANCE_PRECISE = 10;
@@ -19,72 +23,77 @@ const MAX_DISTANCE_METERS = 2000;
   templateUrl: 'home.html'
 })
 export class HomePage {
-  private i: number;
-  private deviceLocation: Coord;
+  private phoneLocation: Coord;
   public distance: number;
   public distanceDisplay: string;
   public user: User;
   public location: Coord = {lat: 1, lon: 1, date: new Date()};
-  public error: {code: string, message: string} = { code: '', message: ''};
   public selectedDevice: Device;
   public lastLocation: Coord;
   public unit: string;
+
+  public data: string;
+  public error: string;
 
   constructor(
     public navCtrl: NavController,
     private menu: MenuController,
     private localNotifications: LocalNotifications,
-    private my_gpsService: GPSService) {
-      this.i = 1;
-      this.user = JSON.parse(localStorage.getItem('user'));
-      this.selectedDevice = this.user.devices[0];
-      this.selectLastLoction(this.selectedDevice);
-      this.deviceLocation = {
+    private my_gpsService: GPSService,
+    private my_socketService: SocketService,
+    private my_userService: UserService,
+    private vibration: Vibration) {
+      this.phoneLocation = {
         lat: 51.1256244,
         lon: 17.073622099999966,
         date: new Date()
       };
+      // this.phoneLocation = null;
 
-      const testLocation: Coord = {
-        lat: 51.02542089999999,
-        lon: 17.07778200000007,
-        date: new Date()
-      };
-
-      this.distance = this.calculateDistance(this.deviceLocation, this.lastLocation);
-      this.distanceDisplay = this.formatDisplayDistance(this.distance);
-      this.unit = this.determineUnit();
+      this.getUserLocalStorage();
+      this.setDevices();
+      this.setDistanceData();
       this.menu.enable(true);
 
-      // this.my_gpsService.watchPosition()
-      // .subscribe(data => {
-      //   this.location.lat = data.coords.latitude;
-      //   this.location.lon = data.coords.longitude;
-      // },
-      // error => {
-      //   this.error = error;
-      // });
-  }
+      this.my_socketService.locationChange.subscribe( change => {
+        switch (change.type) {
+          case 'alert':
+            this.setNewGPSActivity(change);
+            break;
+          case 'update':
+            this.setNewLocation(change);
+            break;
+        }
+        this.lastLocation = change.coords[0];
+        this.setDistanceData();
+        this.vibrateIfClose();
+      });
 
-  public createNotification(): void {
-    this.localNotifications.schedule({
-      id: this.i,
-      text: 'Single ILocalNotification',
-    });
-    this.i += 1;
+      this.my_gpsService.watchPosition()
+      .subscribe(data => {
+        this.data = JSON.stringify(data);
+        if (Object.keys(data).length === 0) {
+          return;
+        }
+        this.phoneLocation = {
+          lat: data.coords.latitude,
+          lon: data.coords.longitude,
+          date: new Date()
+        };
+      },
+      err => {
+        this.error = JSON.stringify(err);
+      });
   }
 
   public afterDeviceSelect(): void {
     this.selectLastLoction(this.selectedDevice);
-    if (this.lastLocation != null) {
-      this.distance = this.calculateDistance(this.deviceLocation, this.lastLocation);
-      this.distanceDisplay = this.formatDisplayDistance(this.distance);
-      this.unit = this.determineUnit();
-    } else {
-      this.distanceDisplay = 'No data';
-      this.unit = '';
-    }
+    this.setDistanceData();
+  }
 
+  private getUserLocalStorage(): void {
+    // this.user = JSON.parse(localStorage.getItem('user'));
+    this.user = this.my_userService.getUser();
   }
 
   private setDevices(): void {
@@ -94,6 +103,17 @@ export class HomePage {
       this.selectedDevice = this.user.devices[0];
     }
     this.selectLastLoction(this.selectedDevice);
+  }
+
+  private setDistanceData(): void {
+    if (this.lastLocation != null) {
+      this.distance = this.calculateDistance(this.phoneLocation, this.lastLocation);
+      this.distanceDisplay = this.formatDisplayDistance(this.distance);
+      this.unit = this.determineUnit();
+    } else {
+      this.distanceDisplay = 'No data';
+      this.unit = '';
+    }
   }
 
   public selectLastLoction(device: Device): void {
@@ -135,4 +155,31 @@ export class HomePage {
       return (distance / 1000).toFixed(0);
     }
   }
+
+  private setNewGPSActivity(message: any): void {
+    const newGPSActivity: GPSActivity = {wakeupTime: message.wakeupTime, coords: message.coords};
+    this.user.devices
+      .find(device => device.deviceId === message.deviceId)
+      .gpsData
+      .push(newGPSActivity);
+  }
+
+  private setNewLocation(message: any): void {
+    const gpsData = this.user.devices
+      .find(device => device.deviceId === message.deviceId)
+      .gpsData;
+    gpsData[gpsData.length - 1].coords.push(message.coords[0]);
+  }
+
+  private vibrateIfClose(): void {
+    if (this.distance < 10) {
+      this.vibrate(1000);
+    }
+  }
+
+  private vibrate(msDuration: number): void {
+    this.vibration.vibrate(msDuration);
+  }
+
+
 }

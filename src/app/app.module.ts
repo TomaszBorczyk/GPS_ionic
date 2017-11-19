@@ -3,6 +3,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Vibration } from '@ionic-native/vibration';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { HomePage } from '../pages/home/home';
@@ -43,6 +44,7 @@ import { UserService } from '../services/user.service';
     AlertService,
     AuthService,
     LocalNotifications,
+    Vibration,
     Geolocation,
     GPSService,
     NotificationService,

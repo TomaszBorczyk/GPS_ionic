@@ -14,7 +14,7 @@ import { UserService } from './user.service';
 export class SocketService {
   private socketUrl: string;
   private socket;
-  public message = new Subject<any>();
+  public locationChange = new Subject<any>();
 
   constructor(
       private my_userService: UserService,
@@ -28,7 +28,17 @@ export class SocketService {
 
   private setSocketListen() {
     this.socket.on('alert', message => {
-        // this.message.next(message);
+        Object.assign(message, {type: 'alert'});
+        this.locationChange.next(message);
+        this.my_userService.addDeviceActivity(message);
+        this.my_alertService.presentAlert(message.name);
+        this.my_notificationService.alertUnwantedMovement(message);
+    });
+
+    this.socket.on('update', message => {
+        Object.assign(message, {type: 'update'});
+        this.locationChange.next(message);
+        this.my_userService.updateDeviceLocation(message);
         this.my_alertService.presentAlert(message.name);
         this.my_notificationService.alertUnwantedMovement(message);
     });
@@ -47,10 +57,5 @@ export class SocketService {
   public disconnect() {
       this.socket.disconnect();
   }
-
-
-
-
-
 
 }

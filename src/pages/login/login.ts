@@ -80,7 +80,7 @@ export class LoginPage {
           .login(username, password)
           .then( () => {
             this.navCtrl.setRoot(HomePage);
-            this.navCtrl.push(HomePage);
+            // this.navCtrl.push(HomePage);
           })
           .catch( err => {
             this.loginFailed = true;
