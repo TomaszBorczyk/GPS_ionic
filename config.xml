@@ -89,4 +89,9 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
     <plugin name="cordova-plugin-vibration" spec="^2.1.6" />
+    <plugin name="cordova-background-geolocation-lt" spec="^2.9.1">
+        <variable name="LICENSE" value="YOUR_LICENSE_KEY" />
+        <variable name="GOOGLE_API_VERSION" value="11.6.0" />
+        <variable name="APPCOMPAT_VERSION" value="26.1.0" />
+    </plugin>
 </widget>

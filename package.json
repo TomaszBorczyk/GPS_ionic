@@ -28,7 +28,9 @@
     "@ionic-native/vibration": "^4.4.2",
     "@ionic/storage": "2.0.1",
     "cordova-android": "~6.3.0",
+    "cordova-background-geolocation-lt": "^2.9.1",
     "cordova-plugin-app-event": "^1.2.1",
+    "cordova-plugin-background-fetch": "^5.1.1",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-geolocation": "^2.4.3",
@@ -62,7 +64,12 @@
       "cordova-plugin-geolocation": {
         "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
       },
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
+      "cordova-background-geolocation-lt": {
+        "LICENSE": "YOUR_LICENSE_KEY",
+        "GOOGLE_API_VERSION": "11.6.0",
+        "APPCOMPAT_VERSION": "26.1.0"
+      }
     },
     "platforms": [
       "android"

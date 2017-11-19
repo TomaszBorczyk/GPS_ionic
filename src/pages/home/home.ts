@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
+import { Geolocation } from '@ionic-native/geolocation';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Vibration } from '@ionic-native/vibration';
-import { NavController } from 'ionic-angular';
-import { MenuController } from 'ionic-angular';
+import { MenuController, NavController, Platform } from 'ionic-angular';
 
 import { Coord } from '../../models/coords.model';
 import { Device } from '../../models/device.model';
@@ -13,6 +13,7 @@ import { GPSService } from '../../services/gps.service';
 import { SocketService } from '../../services/socket.service';
 import { UserService } from '../../services/user.service';
 
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { LoginPage } from '../login/login';
 
 const MAX_DISTANCE_PRECISE = 10;
@@ -22,8 +23,10 @@ const MAX_DISTANCE_METERS = 2000;
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnDestroy {
   private phoneLocation: Coord;
+  private bgGeo: any;
+  private gpsFlag: boolean;
   public distance: number;
   public distanceDisplay: string;
   public user: User;
@@ -38,18 +41,18 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     private menu: MenuController,
+    private platform: Platform,
     private localNotifications: LocalNotifications,
     private my_gpsService: GPSService,
     private my_socketService: SocketService,
     private my_userService: UserService,
     private vibration: Vibration) {
+      platform.ready().then(() => this.configureBackgroundGeolocation());
       this.phoneLocation = {
         lat: 51.1256244,
         lon: 17.073622099999966,
         date: new Date()
       };
-      // this.phoneLocation = null;
-
       this.getUserLocalStorage();
       this.setDevices();
       this.setDistanceData();
@@ -69,23 +72,51 @@ export class HomePage {
         this.vibrateIfClose();
       });
 
-      this.my_gpsService.watchPosition()
-      .subscribe(data => {
-        this.data = JSON.stringify(data);
-        if (data == null) {
-          return;
-        }
-        this.phoneLocation = {
-          lat: data.coords.latitude,
-          lon: data.coords.longitude,
+      // if (navigator.geolocation) {
+      //   const options = { enableHighAccuracy: true };
+      //   navigator.geolocation.watchPosition(
+      //     position => {
+      //      const { coords } = position;
+      //      this.phoneLocation = {
+      //         lat: coords.latitude,
+      //         lon: coords.longitude,
+      //         date: new Date()
+      //       };
+      //     this.setDistanceData();
+      //    }, error => {
+      //      console.log(error);
+      //    }, options);
+      // }
+  }
+
+  ngOnDestroy() {
+    this.bgGeo.stop();
+  }
+
+  private configureBackgroundGeolocation() {
+    this.bgGeo = (<any>window).BackgroundGeolocation;
+    this.bgGeo.on('location', this.onLocation.bind(this));
+    this.bgGeo.configure({
+      debug: true,
+      desiredAccuracy: 0,
+      distanceFilter: 0,
+      url: 'http://192.168.11.100:8080/locations',
+      autoSync: true
+    }, state => this.bgGeo.start());
+  }
+
+  private onLocation(location, taskId) {
+    const options = { enableHighAccuracy: true };
+       const { coords } = location;
+       this.phoneLocation = {
+          lat: coords.latitude,
+          lon: coords.longitude,
           date: new Date()
         };
-        this.setDistanceData();
-      },
-      err => {
-        this.error = JSON.stringify(err);
-      });
+      this.setDistanceData();
+      this.vibrateIfClose();
   }
+
 
   public afterDeviceSelect(): void {
     this.selectLastLoction(this.selectedDevice);
@@ -93,7 +124,6 @@ export class HomePage {
   }
 
   private getUserLocalStorage(): void {
-    // this.user = JSON.parse(localStorage.getItem('user'));
     this.user = this.my_userService.getUser();
   }
 
@@ -112,6 +142,8 @@ export class HomePage {
       this.distanceDisplay = this.formatDisplayDistance(this.distance);
       this.unit = this.determineUnit();
     } else {
+      this.bgGeo.stop();
+      this.distance = null;
       this.distanceDisplay = 'No data';
       this.unit = '';
     }
@@ -148,10 +180,8 @@ export class HomePage {
   }
 
   private formatDisplayDistance(distance: number): string {
-    if (distance < MAX_DISTANCE_PRECISE ) {
+    if (distance < MAX_DISTANCE_METERS ) {
       return distance.toFixed(1);
-    } else if (distance < MAX_DISTANCE_METERS ) {
-      return distance.toFixed(0);
     } else {
       return (distance / 1000).toFixed(0);
     }
@@ -174,7 +204,7 @@ export class HomePage {
 
   private vibrateIfClose(): void {
     if (this.distance < 10) {
-      this.vibrate(1000);
+      this.vibrate(100);
     }
   }
 
