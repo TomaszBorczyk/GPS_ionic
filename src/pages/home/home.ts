@@ -38,18 +38,20 @@ export class HomePage {
       this.i = 1;
       this.user = JSON.parse(localStorage.getItem('user'));
       this.selectedDevice = this.user.devices[0];
-      this.afterDeviceSelect();
+      this.selectLastLoction(this.selectedDevice);
       this.deviceLocation = {
         lat: 51.1256244,
         lon: 17.073622099999966,
         date: new Date()
       };
+
       const testLocation: Coord = {
         lat: 51.02542089999999,
         lon: 17.07778200000007,
         date: new Date()
       };
-      this.distance = this.calculateDistance(this.deviceLocation, testLocation);
+
+      this.distance = this.calculateDistance(this.deviceLocation, this.lastLocation);
       this.distanceDisplay = this.formatDisplayDistance(this.distance);
       this.unit = this.determineUnit();
       this.menu.enable(true);
@@ -74,6 +76,15 @@ export class HomePage {
 
   public afterDeviceSelect(): void {
     this.selectLastLoction(this.selectedDevice);
+    if (this.lastLocation != null) {
+      this.distance = this.calculateDistance(this.deviceLocation, this.lastLocation);
+      this.distanceDisplay = this.formatDisplayDistance(this.distance);
+      this.unit = this.determineUnit();
+    } else {
+      this.distanceDisplay = 'No data';
+      this.unit = '';
+    }
+
   }
 
   private setDevices(): void {
@@ -103,8 +114,6 @@ export class HomePage {
     const dLat = this.toRadians(coord2.lat - coord1.lat);
     const dLon = this.toRadians(coord2.lon - coord1.lon);
     const a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(coord1.lat) * Math.cos(coord2.lat) * Math.pow(Math.sin(dLon / 2), 2);
-    // c = 2 * atan2( sqrt(a), sqrt(1-a));
-    // distance = RADIUS * c;
     const distance = 2 * radius * Math.asin(Math.sqrt(a));
     return distance * 1000;
   }
