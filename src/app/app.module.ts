@@ -1,3 +1,4 @@
+import { AgmCoreModule } from '@agm/core';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,8 +8,8 @@ import { Vibration } from '@ionic-native/vibration';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
+import { MapPage } from '../pages/map/map';
 import { MyApp } from './app.component';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,19 +26,22 @@ import { UserService } from '../services/user.service';
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
+    MapPage,
     LoginPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCJQ3YYQe4d37-LIG_84zwUQF4_Bior3ZA'
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
+    MapPage,
     LoginPage
   ],
   providers: [

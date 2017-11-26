@@ -1,0 +1,23 @@
+page-map {
+    ion-select {
+        margin: auto;
+        color: #fff;
+        background-color: lighten(color($colors, main-dark), 10%);
+        width: 70%;
+        max-width: 70%;
+        &:nth-of-type(2){
+            background-clor: red;
+            display: none;
+        }
+    }
+
+    .item-cover {
+        width: 0;
+        height: 0;
+    }
+
+    agm-map {
+        width: 100%;
+        height: 100%;
+    }
+}

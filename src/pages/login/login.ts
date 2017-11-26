@@ -1,9 +1,8 @@
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Component, Injectable, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
-import { MenuController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 
 
@@ -47,7 +46,6 @@ export class LoginPage {
     }
 
     ionViewDidLoad() {
-      console.log('ionViewDidLoad LoginPage');
     }
 
 
