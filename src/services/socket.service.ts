@@ -32,7 +32,7 @@ export class SocketService {
         this.locationChange.next(message);
         this.my_userService.addDeviceActivity(message);
         this.my_alertService.presentAlert(message.name);
-        this.my_notificationService.alertUnwantedMovement(message);
+        this.my_notificationService.alertUnwantedMovement(message.name);
     });
 
     this.socket.on('update', message => {
@@ -40,7 +40,7 @@ export class SocketService {
         this.locationChange.next(message);
         this.my_userService.updateDeviceLocation(message);
         this.my_alertService.presentAlert(message.name);
-        this.my_notificationService.alertUnwantedMovement(message);
+        this.my_notificationService.alertUnwantedMovement(message.name);
     });
   }
 

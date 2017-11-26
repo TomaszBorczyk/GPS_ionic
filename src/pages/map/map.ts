@@ -90,26 +90,8 @@ export class MapPage implements OnInit {
       return;
     }
     this.selectedActivity = activity;
-    console.log(this.selectedActivity);
-    this.clearRoute();
     this.setMapCenter(activity.coords[0]);
     this.triggerMapResize();
-  }
-
-  public createRoute(): void {
-    this.clearRoute();
-    const coords: Array<Coord> = this.selectedActivity.coords;
-    this.origin = coords[0];
-    this.destination = coords[coords.length - 1];
-    this.routeFlag = true;
-  }
-
-  public triggerRoute(): void {
-    this.routeFlag = !this.routeFlag;
-  }
-
-  private clearRoute(): void {
-    this.routeFlag = false;
   }
 
   private setMap(): void {
