@@ -8,6 +8,7 @@ import { Vibration } from '@ionic-native/vibration';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { HomePage } from '../pages/home/home';
+import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { MapPage } from '../pages/map/map';
 import { MyApp } from './app.component';
@@ -27,7 +28,8 @@ import { UserService } from '../services/user.service';
     MyApp,
     HomePage,
     MapPage,
-    LoginPage
+    LoginPage,
+    ListPage
   ],
   imports: [
     BrowserModule,

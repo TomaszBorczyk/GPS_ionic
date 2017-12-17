@@ -12,7 +12,6 @@ import { GPSActivity } from '../../models/gps.model';
 import { User } from '../../models/user.model';
 
 
-@IonicPage()
 @Component({
   selector: 'page-map',
   templateUrl: 'map.html',

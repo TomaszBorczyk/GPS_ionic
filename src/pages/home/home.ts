@@ -38,6 +38,8 @@ export class HomePage implements OnDestroy {
   public data: string;
   public error: string;
 
+  public vibra: boolean;
+
   constructor(
     public navCtrl: NavController,
     private menu: MenuController,
@@ -47,6 +49,9 @@ export class HomePage implements OnDestroy {
     private my_socketService: SocketService,
     private my_userService: UserService,
     private vibration: Vibration) {
+      if (localStorage.getItem('vibra')) {
+        this.vibra = this.getVibraSetting();
+      }
       platform.ready().then(() => this.configureBackgroundGeolocation());
       this.phoneLocation = {
         lat: 51.1256244,
@@ -203,9 +208,17 @@ export class HomePage implements OnDestroy {
   }
 
   private vibrateIfClose(): void {
-    if (this.distance < 10) {
+    if (this.distance < 10 && this.vibra) {
       this.vibrate(100);
     }
+  }
+
+  public getVibraSetting(): boolean {
+    return 'true' === localStorage.getItem('vibra');
+  }
+
+  public saveVibraSetting(): void {
+    localStorage.setItem('vibra', String(this.vibra));
   }
 
   private vibrate(msDuration: number): void {

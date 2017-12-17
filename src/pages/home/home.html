@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="ui">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -18,6 +18,12 @@
     <span> {{unit}} </span>
   </div>
   <!-- <div *ngIf="phoneLocation == null">Waiting for phone GPS...</div> -->
-  <div style="color: white"> phonegps: {{data}}, error: {{error}}</div>
-  <div style="color: white"> gps: {{phoneLocation.lat}}, {{phoneLocation.lon}}</div>
+  <!-- <div style="color: white"> phonegps: {{data}}, error: {{error}}</div>
+  <div style="color: white"> gps: {{phoneLocation.lat}}, {{phoneLocation.lon}}</div> -->
+
+  <ion-item no-lines class="item item-borderless">
+    <ion-label>Vibration</ion-label>
+    <ion-checkbox [(ngModel)]="vibra" (ionChange)="saveVibraSetting()"></ion-checkbox>
+  </ion-item>
+
 </ion-content>

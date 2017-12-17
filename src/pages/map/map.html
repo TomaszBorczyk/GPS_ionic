@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="ui">
     <button ion-button menuToggle>
           <ion-icon name="menu"></ion-icon>
     </button>
@@ -24,7 +24,7 @@
   
   <div class="my-select device-select">
       <ion-select [(ngModel)]="selectedDevice" name="devices-select" id="devices-select" (ngModelChange)="selectDevice($event)">
-          <ion-option *ngFor="let device of devices" [value]="device">{{device.deviceId}}</ion-option>
+          <ion-option *ngFor="let device of devices" [value]="device">{{device.name}}</ion-option>
       </ion-select>
   </div>
 

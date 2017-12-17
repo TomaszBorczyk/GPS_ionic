@@ -22,7 +22,7 @@ $app-direction: ltr;
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
-
+$main-dark-violet: rgb(10, 24, 41);
 
 
 // Named Color Variables
@@ -39,7 +39,11 @@ $colors: (
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222,
-  main-dark:  rgb(10, 24, 41)
+  main-dark:  $main-dark-violet,
+  ui: (
+    base: lighten($main-dark-violet, 8%),
+    contrast: white
+  ),
 );
 
 

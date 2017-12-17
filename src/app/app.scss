@@ -21,3 +21,11 @@
 .map {
     background-color: rgb(10, 24, 41);
 }
+
+.side-menu{
+    background-color: color($colors, main-dark);
+    button {
+        background: transparent;
+        color: white;
+    }
+}

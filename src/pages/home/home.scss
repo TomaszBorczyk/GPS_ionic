@@ -2,7 +2,7 @@ page-home {
     ion-select {
         margin: auto;
         color: #fff;
-        background-color: lighten(color($colors, main-dark), 10%);
+        background-color: lighten(color($colors, main-dark), 5%);
         width: 70%;
         max-width: 70%;
     }
@@ -66,5 +66,11 @@ page-home {
             left: 50%;
             transform: translate(-50%, -50%);
     }
-
+    
+    .item{
+        margin-top: 50px;
+        margin-left: 85px;
+        color: white;
+        background: transparent;
+        }
 }
